@@ -1,0 +1,51 @@
+{
+  "name": "wflo",
+  "description": "wflo - A flow diagram programming language",
+  "version": "0.0.1",
+  "author": "Andrey Gershun <agershun@gmail.com>",
+  "contributors": [
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3"
+  },
+  "engines": [
+    "node"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/agershun/wflo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/agershun/wflo/issues"
+  },
+  "bin": {
+    "wflo": "./bin/wflo-cli.js"
+  },
+  "homepage": "https://github.com/agershun/wflo",
+  "main": "dist/wflo.js",
+  "keywords": [
+    "wflo"
+  ],
+  "license": "MIT",
+  "preferGlobal": true,
+  "testling": {
+    "browsers": [
+      "ie/6..latest",
+      "chrome/22..latest",
+      "firefox/16..latest",
+      "safari/latest",
+      "opera/11.0..latest",
+      "iphone/4..latest",
+      "ipad/4..latest",
+      "android-browser/4..latest"
+    ]
+  },
+  "typings": "./dist/wflo.d.ts"
+}
