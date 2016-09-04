@@ -1,0 +1,15 @@
+wflo()...
+
+Debug from Node.js
+==================
+var wflo = require('wflo')();
+wflo().v('Hello World!').log().debug();
+
+
+Debug from browser
+==================
+<link href="wflo.css" type="stylesheet">
+<script src="wflo.js"></script>
+<script>
+	wflo().v('Hello World!').log().debug();
+</script>

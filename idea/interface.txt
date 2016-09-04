@@ -1,0 +1,390 @@
+var wflo = require('wflo');
+
+Main functions
+==============
+wflo() -- create new graph
+// fluent graph creation
+.i() .in()
+.a() .add()
+.v() .adv()
+.o() .out()
+.l() .link()
+.n() .nl()
+// Run
+.run()
+// Callbacks
+.callback()
+.error()
+.timeout()
+.idle()
+.notify()
+// Client-server
+.server()
+.client()
+.deploy()
+// Management
+.stop()
+.pause()
+.resume()
+.go()
+// Components management
+.use()
+
+Components
+==========
+Standard
+========
+log
+timer
+http
+
+HTML/jQuery
+=======
+$
+
+Node
+=====
+fs  
+
+Control
+======
+for
+while
+call
+if
+switch
+
+Definition
+==========
+const
+let
+def
+use
+
+Arifmetic
+========
+set v / v= /v+=/v-=/v*=/v/=/v!=/v&=/v|=/v^=
+v++
+
+Catcher
+=====
+catch
+on
+case
+
+Else
+=====
+go
+yield
+pause
+resume
+
+Const
+=====
+'string', "string", `string`
+10
+true
+[1,2,3]
+{a:1}
+
+Compile
+=======
+.compile()
+
+DSL
+===
+operator [; operator]...
+operator:
+[inport] [[label:] ([component() [{block}]] | value | operation) [@metadata] [outport]]
+label: value @metadata outport
+
+operation
+id &= expression
+id &= ()
+
+
+Component definition
+====================
+name
+inports
+outports
+apearance...
+
+
+Expressions/let/set
+====================
+(x)
+(x=10)
+(x=)
+(x++)
+inport (expression) -> component(expr-list)
+
+10 >> #(x=) >>;  #(x=10) >>;
+1>>x a:move();
+2>>y a:;
+#(x) >> #(y=);
+%(x) >> %(y=);
+%x >> %y=;
+#y >> #y=;
+#(Math.sin(1,2,3));
+
+id - все знаки, кроме () >> ; {} : , 
+нет...
+#x; #x++;
+
+#x=1 >> while(x<10) { 
+	#x++ >> log(x) >> 
+} >> log('Done');
+
+sh.pwd() >> fs.dir() >> each() {
+	sh.ls() >> fs.append(file:"a.csv")
+}
+
+Metadata
+========
+title
+x,y,h,w,color,bgcolor, 
+timeout, idle
+
+
+Timeoit
+=======
+a: none() ;
+a: @{timeout:1000} timeout >> log('timeout');
+
+
+one.wflo - text graph
+one.js - compiled graphs
+
+"Hello, World!" >> log();
+'Hello, World!' >> log();
+`Hello, World!` >> log();
+log("Hello World");
+
+js(`1+1`);
+html('');
+
+java(`
+class main
+`) >> log('done');
+
+
+fork(10) {log()} >>;
+
+Finite State Machine
+====================
+
+a: -> notify('ab') +> b:;
+@(x), @(x=), !(x), *x, $z
+>> #a >> #(a=a+2); 
+a$10  >> go(a$)
+a@"Hello" >> go(a@)
+@x @(101)
+10 %{x:10,y:20} >> @x= >> @x++ >> @(x+=2) %{}
+circle(x:x, y:y, color:Color.random());
+
+#Walk.Run {};
+
+
+#<walk {log('stop walking')};
+#>run {log('start running')};
+#walk>run {log('start running from walking')};
+state(#walk) >> state(#run);
+#walk {log('do something')};
+
+get('rbc.ru') html >> #1 $('a') href >> get() html >> $('a') href
+=> _.uniq() >> #2 @{filename, data:in} =>;
+#1 >> filename #2;
+
+function links2(url,done) {
+	wflo()
+	.a('get',url).o('html')
+		.a('$',['a']).o('href')
+			.a('get').o('html')
+				.a('$',['a']).o('href')
+	.collect() // Как сделать этот буфер?
+	.a('_.uniq').l()
+	run().then(done);
+}
+
+file('a.txt') => file('b.txt'); // Передача группой
+file('a.txt') >> file('b.txt'); // Передача отдельных сообщений
+
+spawn(10) >> @Math.random() => sort() >> log();
+times(10) {@Math.random()} >> sort() >> log();
+[1,2,3] >> each() {@Math.random()} >> sort() >> log();
+
+group: data[], meta[]
+
+load('a.txt') >> ... -- Надо еще думать над потоками...
+
+[1,2,3] >> each() >> @in+1 >> group() group >> log(in.type);
+// 'array'
+file('a.txt') >> split() >> @in.length >> group() group >> log(in.type);
+// 'file'
+
+table('one') >> select('a','b') >> sort('a') >> table('two');
+
+table('one') record => {a,b} => table('two');
+sql('SELECT name FROM one') => @in.name.length => group() => sort('name') => log();
+sql('SELECT name FROM one') >> @in.name.length >> sort('name') => log();
+
+sql('SELECT name FROM one') >> file('a.txt');
+>> file/table stream
+=> record/line/object
+-> message/control/signal
+
+file('a.txt') - если нет входящих потоков - то file.read() - иначе file.write()
+file.read('a.txt') >> stream object
+file.read('a.txt') => set of messages with lines + start/finish messages
+file.read('a.txt') -> text file content
+
+10 -> @in+1 -> log();
+[1,2,3] => @in+1 -> log(); // set if lines
+[1,2,3] => @in+1 => log(); // array
+[1,2,3] -> @in+1 -> log(); // error
+[1,2,3] >> @in+1 >> log(); // 
+
+
+=> group with whole object
+-> message
+
+@1+2 -> log();
+
+file('a.txt')
+timer(100) -> log() // 0,1,2,...
+timer(100) => log() // <start>,1,2,3,...,<finish> - splitted by records/lines/chunks 
+timer() >> // <start> with timer info timer() >> start();
+{type:'timer',data:[0,1,2,3,4...]}
+
+watch('*.txt') -> join()
+watch('*.txt') => join()
+watch('*.txt') >> ???
+
+def logger(dbengine) {
+	db.table() >> 
+}
+
+logger(postgresql(''))
+	watch('*.*') /{timeout:10000} => merge() -> sort() -> log(0;
+)
+
+[].split()
+string.split()
+object.split() {key:, value:}/[key,value]
+
+file('a.txt') >> split() => 
+
+[1,2,3] -> map() { @10-in } -> log();
+[1,2,3] >> 
+
+postgresql.connect() -> .table('one')
+
+use('postgresql') -> @db= -> db;
+
+wind (engine, conn) {
+	engine.connect(conn) -> {
+		.table('one') => log();
+		.sql('SELECT * FROM one') => log();
+		.table('one') >> sort('a') >> read() => log();
+		.sql('SELECT * FROM one') >> sort('-a') >> read() => log();
+	};
+}
+
+
+[1,2,3] -> each(){ @in+1 } >> do() => log();
+postgresql.table(conn:conn, table:'one') >> a.a;
+
+>> >> >>;
+'lazy' event;
+
+simple event ->
+combined event stream... => 
+lazy >> ? - do we need it?
+
+#a state() {
+	#>walking {log ('start walking');}; 
+	#<walking {log ('finish walking');}
+	#running {delay(10)} -> #walking;
+};
+
+a('walking');
+
+Описание светофора
+==================
+state светофор () {
+	#красный {@color='red'};
+	#желтый {@color='yellow'}
+	#зеленый {@color='green'}
+	#неисправен {#1 @color='yellow' -> delay(500) -> @color=null -> delay(500) -> #1}
+};
+#начало светофор(#красный) -> delay(10000) -> светофор(#зеленый) -> delay(10000) -> #начало;
+catch() -> светофор(#неисправен);
+
+Описание простого ETL задания
+=============================
+postgresql('locahost:5432') -> table('one') >> file('one.txt') >> file('two.txt');
+table('one') => {a:in.id, b:in.name} => file('one.txt');
+table('one') => #1 sort(tempFilename:'~/a.tmp') => file('one.txt');
+['a','b'] -> sortColumns #1;
+
+table('one') => #1 sort() => file('one.txt');
+
+
+// Служба создания временных файлов
+wflo.options.tempdir = '~/tmp';
+
+=> stream
+-> event+message
+
+input() -> go(state);
+#a match(/[0-9]+/) -> log('number');
+#a else -> #b match(/./) -> log('string');
+#a else -> log('nothing');
+
+if(match(/[0-9]+/)) {
+	log('number')
+} else -> if(match(/[a-z]+)) {
+	log('id')
+} else -> log('nothing');
+
+file('a.txt') => if(in.length > 10) => file('b.txt');
+
+file('a.txt') => #a detectLanguage() russian => file('ru.txt');
+#a german => file('de.txt');
+
+
+
+
+
+
+-> #светофор(#желтый) -> delay(10000) #1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+instream - outstream >>
+in - out =>
+
+

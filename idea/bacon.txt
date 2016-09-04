@@ -1,0 +1,202 @@
+var up   = $('#up').asEventStream('click');
+var down = $('#down').asEventStream('click');
+​
+var counter =
+  // map up to 1, down to -1
+  up.map(1).merge(down.map(-1))
+  // accumulate sum
+    .scan(0, function(x,y) { return x + y });
+​
+// assign observable value to jQuery property text
+counter.assign($('#counter'), 'text');
+
+$('#up').on('click') -> 1 -> #m @counter+= -> $('#counter').text(in);
+$('#down').on('click') -> -1 -> #m;
+
+$.on('#up','click') -> 1
+
+$('#up').on('click') -> @counter++ -> #m $('#counter').text(counter);
+$('#down').on('click') -> @counter-- -> #m;
+
+rxjs
+==========
+/* Get stock data somehow */
+const source = getAsyncStockData();
+
+const subscription = source
+  .filter(quote => quote.price > 30)
+  .map(quote => quote.price)
+  .forEach(price => console.log(`Prices higher than $30: ${price}`);
+
+
+  StockData() -> if(in.price > 30) -> @in.price -> log(`Prices higher than $30: ${in}`)
+
+wind StockDataFilter() {
+	StockData() 
+	-> if(in.price > 30) 
+	-> log(`Prices higher than $30; ${in.price}`);
+
+	catch() -> log('Something goes wrong');
+};
+
+
+observe(x) -> @y=2*x -> log(y);
+observe.deep(x) -> log(x);
+timer(100) -> @x=;
+when(x) -> ...
+when(x==42) -> log(); // true 
+@(x==42) -> log(); // true
+
+getDataFromNetwork()
+  .skip(10)
+  .take(5)
+  .map({ s -> return s + " transformed" })
+  .subscribe({ println "onNext => " + it })
+
+getDataFromNetwork()
+  => skip(10)
+  => take(5)
+  => @(out=in+' transformed')
+  => log('onNext =>'+in);
+
+wflo()
+.a(getDayaFromNetwork)
+.a('skip',10)
+.a('take',5)
+.a(x=>x+' transformed')
+.a('log',x=>'onNext =>'+x)
+.run();
+
+read('a.txt') -> write('b.txt'); / whole
+read('a.txt') => write('b.txt'); / line-by-line
+read('a.txt') >> write('b.txt'); / chunks
+
+\in x=10 \out =>
+$('a') \text >>> kmmkm...
+
+read(filename:'a.csv',format:'csv') => @name => write('b.txt');
+observe(x) -> log('changed');
+
+Embeddable language...
+
+fsm traffic{
+	#red>yellow {log('transfer')};
+	#>red ;
+	#<red {};
+}
+
+FGP for serious men
+
+Large-scale application
+Popular services
+Many articles
+JavaScript/Java/Python/C++ realizations
+
+Application: BI/ETL/IoT/Bots/Graphics/OS/SCADA/Robots
++ AI
+
+Model of perceptron
+AI blocks...
+Дифференциальные уранения
+Dynamics modelling
+Difference equations
+ and application for robots...
+ Fuzzy logic programming
+ Probability programming
+ Agent based modelling
+ Descrete modelling
+ System Dynamics modelling
+
+
+https://habrahabr.ru/post/308864/
+wflo()
+.forEach(data,function(idx,cb){
+	console.log(idx);
+});
+
+wflo().forEach([1,2,3,4,5], (inp, cb) => {
+	console.log(inp.idx, inp.val);
+	setTimeout(cb,1000);
+}).run().then(()=>console.log('done'));
+
+
+wflo-dsl
+========
+[1,2,3,4,5] -> each() {log() -> delay(1000)} -> log('done');
+
+wflo.js
+=======
+wflo().v([1,2,3,4,5]).each(
+	wflo().log().delay(1000)
+).log('done').run();
+
+Reactive
+========
+wflo().var('x').observe('x').log();
+
+Lazy
+========
+width() >> #a place();
+height() >> #a;
+
+#a >> calc();
+
+var wflo = require('wflo').wflo();
+wflo().v([1,2,3]).forEach(wflo().log().delay(1000)).run();
+
+wflo().let('x',1).while(x=>x>0, wflo().log().set('x','++').delay(1000)).run();
+
+.each() - async
+.forEach() - sync
+.log()
+
+wflo().delay(1000).log(1).run();
+wflo().while(x=>x<10,wflo().v(()=>x++).delay(1000)).run();
+
+var x;
+wflo()
+.v(()=>x=0) // .set('x',0)
+.b('loop')
+.v(()=>x++)	// .inc('x')
+.log()
+.if(()=>x<10)
+.b('loop')
+.run();
+
+Тут нужно еще реактивное и ленивое.
+x.z().
+
+Laziness => Аналог make
+=======================
+a() >> b();
+a.changed()?
+make(a) >> make(b);
+
+make(b);
+
+Как определить, не изменялись ли компоненты?
+if(changed) make();
+
+isChanged() - вход
+for(pred) if(pred.changed()) pred.make();
+calc(current);
+send(next);
+
+Способы проверить изменения:
+хранить старое значение (или timestamp или GUID);
+
+read('a.csv') >> tail(5) >> write('b.csv') >> goal();
+#b watch('a.csv') -> read('a.csv') -> tail(5) -> write('b.csv');
+watch('a.csv') -> #a;
+wflo().lazy().read('a.csv').tail(5).write('b.csv').goal().run();
+
+Async / reactive / lazy flow graph programming JS library;
+
+e(fn, cfn)
+
+
+
+
+
+
+

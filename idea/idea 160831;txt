@@ -1,0 +1,88 @@
+idea
+====
+
+wflo()
+.b('a').v(()=>0/0).log('ok').n()
+.b('a').o('error').log('bad!')
+.run();
+
+#a @0/0 -> log('ok');
+#a error -> log('bad');
+
+
+wflo()
+.v(function(data,cb){
+	console.log(1);
+	console.log(data);
+	cb(200);
+}).v(function(data,cb){
+	console.log(2);
+	console.log(data);
+	cb(300);
+}).run(100).then(function(data){
+	console.log(data);
+});
+
+var w = wflo()
+.each(function(data,cb){
+	if(data > 2) cb(data);
+	else cb();
+});
+
+w([1,2,3]);
+
+wflow().var('x').observe('x').log(\)
+wflo().debug();
+wflo.editor();
+wflo.studio();
+wflo.compile();
+
++---------------+
+|               |
+|               |
+|      [1]      |
+|               |
+|               |
++---------------+
+
+wflo().v(1).run().then(function(data){console.log(data)});
+
+
+Wflo includes these sub-projects:
+* wflo.js - small compact JavaScript library
+* wflo npm package for node.js with server
+* wflo-studio.js - compact HTML/JS editor and debugger and composer
+* wflo-compiler.js - compiler from Wflo DSL to JavaScript + CLI compiler + compiler to Node-RED and NoFlo
+* wflo components sets (browser/node.js/both)
+
+Какие задачи должен решать Wflo?
+- async
+- react
+- observable
+- streams
+- lazy / event-based :)
+
+for:
+IoT, bots, big data, ETL, async and distributed programming, games, even children learning...
+
+#main << #a, #b;
+#a << {log(1)};
+
+1 -> log(), else -> log() -> ...;
+
+
+
+How to make
+
+wflo().fsm('traffic',{'walk':..., '>walk':..., 'walk-run':...})
+.state('traffic','walk');
+wflo().b('loop').log('ok').delay(500).go('a');
+
+Включать ли lazy?
+=================
+
+
+
+
+
+

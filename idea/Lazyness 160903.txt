@@ -1,0 +1,50 @@
+Lazyness
+========
+
+10 -> #a add(4) -> #b log();
+
+States
+======
+
+%<a log(1);
+%a>b log(2) @{timeout:1000};
+%>a log(3);
+
+%a -> %b -> %a;
+go(%a);
+
+Lazy
+====
+read('*.java') >> compile :: 
+
+Flows
+Streams
+States
+Lazy
+Reactive
+
+goal(#a) -> log(); 
+onchange() -> ?a;
+
+
+Зависимости
+===========
+def compile << sls, lll, lll {sls -> #a; lll -> #a; ...};
+def sls << lll;
+
+read('a.csv') csv >> tail(5) >> sort() >> write('a.txt');
+
+Какая задача решается?
+======================
+
+
+compile();
+
+
+get('http://rbc.ru) html -> $('.i08') text -> csv write('aaa.csv');
+wflo().read('a.csv').o('csv').i('tab').write('a.tab').run();
+
+wflo().read('a.txt').write('b.txt').panel();
+
+read('a.txt') -> write('b.txt');
+

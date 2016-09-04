@@ -1,0 +1,47 @@
+wind.call('start',{}).then(function(){
+	
+}).catch(function(){
+	
+});
+
+var wflo = require('wflo');
+
+// Create a wind
+var wind = new wflo.Wind;
+
+// Add a node
+wind.addNode({
+	proc:'log'
+});
+
+// Run wind
+wind.run({in:1}).than(function(data){
+	assert.strictEqual(data.out,1);
+	done();
+}).catch(function(err){
+	// Not here	
+});
+// log(1);
+wind.addNode({proc:'log',args:[1]);
+
+
+// Stub
+stub.file >> 
+
+generate.text({size:10000}) >> split() >> ;
+"hello" >> log();
+thread;
+
+1. wflo.js
+2. Grammar + compiler
+3. daemon
+4. Editor
+5. Components
+
+
+var wflo = require('wflo');
+wflo().add(1).run();
+
+
+
+
